@@ -1,0 +1,32 @@
+.pomodoro-timer {
+  display: grid;
+  grid-column-gap: 10px;
+  align-items: center;
+  justify-content: center;
+  background-color: #fff;
+  padding: 30px;
+  border-radius: 5px;
+}
+
+.pomodoro-timer-time {
+  font-size: 4rem;
+  text-align: center;
+  font-family: monospace;
+  font-weight: bold;
+  padding-bottom: 10px;
+}
+
+.pomodoro-timer-button {
+  background-color: #fff;
+  list-style: none;
+  align-items: center;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+
+}
+
+.button-item:hover {
+  background-color: rgb(0, 0, 187);
+}
+
