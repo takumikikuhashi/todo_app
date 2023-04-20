@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import './App.css';
+import PomodoroTimer from './PomodoroTimer';
 
 function App() {
   const [tasks, setTasks] = useState([]);
   const [newTask, setNewTask] = useState('');
+  const [priority, setPriority] = useState(1);
 
   useEffect(() => {
     fetchTasks();
@@ -12,25 +14,30 @@ function App() {
   const fetchTasks = async () => {
     const response = await fetch('http://localhost:3001/tasks');
     const data = await response.json();
-    if (Array.isArray(data)){
-      setTasks(data);
-    }else{
+    if (Array.isArray(data)) {
+      console.log('Unsorted tasks:', data);
+      const sortedTasks = data.sort((a, b) => a.priority - b.priority);
+      console.log('Sorted tasks:', sortedTasks);
+      setTasks(sortedTasks);
+    } else {
       console.error('Error fetching tasks:', data);
       setTasks([]);
     }
-    
   };
 
   const addTask = async (event) => {
     event.preventDefault();
+    const taskData = { title: newTask, done: false, priority: parseInt(priority, 10) };
+    console.log("Sending data:", taskData);
     const response = await fetch('http://localhost:3001/tasks', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ title: newTask, done: false }),
+      body: JSON.stringify(taskData),
     });
     if (response.ok) {
       fetchTasks();
       setNewTask('');
+      setPriority(1);
     }
   };
 
@@ -56,30 +63,53 @@ function App() {
 
   return (
     <div className="App">
-      <h1>ToDo List</h1>
-      <from onSubmit={addTask}>
-        <input
-          type="text"
-          value={newTask}
-          onChange={(e) => setNewTask(e.target.value)}
-          placeholder="Add a task..."
-        />
-        <button onClick={addTask}>Add</button>
-      </from>
-      <ul>
-        {tasks.map((task) => (
-          <li key={task.id}>
-            <input
-              type="checkbox"
-              checked={task.done}
-              onChange={() => updateTask(task)}
-            />
-            <span className={task.done ? 'done' : ''}>{task.title}</span>
-            <button onClick={() => deleteTask(task.id)}>Delete</button>
-          </li>
-        ))}
-      </ul>
-    </div>
+        <div>
+          <h1>ToDo List</h1>
+          <form onSubmit={addTask} className='form'>
+            <div className='todo-items'>
+              <div className='flex-box-add-task'>
+              <label htmlFor='add tasks' className='.add-tasks-label'>Add tasks :</label>
+              <input
+                className='tasks'
+                type="text"
+                value={newTask}
+                onChange={(e) => setNewTask(e.target.value)}
+                placeholder="Add a task..."
+              />
+              </div>
+              <div className='flex-box-priority'>
+                <label htmlFor='priority' className='priority-label'>Priority :</label>
+                <input
+                  className='priority'
+                  type="number"
+                  id="priority"
+                  value={priority}
+                  onChange={(e) => setPriority(e.target.value) }
+                  min = "1"
+                  max = "9"
+                />
+              </div>
+            </div>
+            <button type="submit" className='button-add'>Add</button>
+          </form>
+          <ul>
+            {tasks.map((task) => (
+              <li key={task.id}>
+                <input
+                  className='checkbox'
+                  type="checkbox"
+                  checked={task.done}
+                  onChange={() => updateTask(task)}
+                />
+                <span className={task.done ? 'done' : ''}>{task.title}</span>
+                <button onClick={() => deleteTask(task.id)} className='delete-botton'>Delete</button>
+              </li>
+            ))}
+          </ul>
+          <PomodoroTimer />
+
+        </div>
+      </div>
   );
 }
 
