@@ -3,38 +3,8 @@
   text-align: center;
   padding: 1rem;
 }
-
-input[type='text'] {
-  padding: 0.5rem;
-  font-size: 1rem;
-}
-
-button {
-  background-color: #007bff;
-  color: white;
-  border: none;
-  font-size: 1rem;
-  padding: 0.5rem 1rem;
-  margin-left: 1rem;
-  cursor: pointer;
-}
-
-button:hover {
-  background-color: #0056b3;
-}
-
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-
-li {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0.5rem 0;
-}
-
-span.done {
-  text-decoration: line-through;
+.swich-button{
+  padding: 8px;
+  width: 320px;
+  text-align: center;
 }
